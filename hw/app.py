@@ -1,0 +1,31 @@
+from flask import Flask, render_template, request
+from datetime import date
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def calculate():
+    difference = None
+    
+    # Check if method is POST and the required form fields exist
+    if request.method == 'POST' and 'dt1' in request.form and 'dt2' in request.form:
+        # Extract inputs and convert them to integers
+        dt1 = int(request.form.get('dt1'))
+        dt2 = int(request.form.get('dt2'))
+        m1 = int(request.form.get('m1'))
+        m2 = int(request.form.get('m2'))
+        year1 = int(request.form.get('year1'))
+        year2 = int(request.form.get('year2'))
+
+        # Create date objects
+        n1 = date(year1, m1, dt1)
+        n2 = date(year2, m2, dt2)
+
+        # Calculate difference (using abs to always get a positive number)
+        diff_object = n2 - n1
+        difference = abs(diff_object.days)
+
+    return render_template('index.html', difference=difference)
+
+if __name__ == '__main__':
+    app.run(debug=True)
